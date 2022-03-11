@@ -10,15 +10,17 @@ int main(int argc, char const *argv[]) {
   string temp;
   cout << "Enter info: "; cin >> temp;
 
-  ofstream out(nameFile, ios_base::binary);
+  ofstream out(nameFile, ios::app);
+  if (!out.is_open()) cout << "Error: bad output\n";
   out.write((char *) &temp, sizeof temp);
-  out.seekp(1, ios_base::cur);
   out.close();
 
-  ifstream in (nameFile, ios_base::binary);
-  if (!in.is_open()) cout << "Error: bad input file";
+  ifstream in (nameFile);
+  if (!in.is_open()) cout << "Error: bad input file\n";
   string inputTemp;
-  in.read((char *) &temp, sizeof temp);
+  while (!in.eof()){
+      in.read((char *) &inputTemp, sizeof inputTemp);
+  }
   in.close();
 
   cout << inputTemp;
