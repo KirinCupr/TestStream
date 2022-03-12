@@ -14,6 +14,7 @@ int main(int argc, char const *argv[]) {
   string nameFile = "data.txt";
 
   TestData temp;
+
   cout << "Enter info: ";
   getline(cin, temp.name);
   getline(cin, temp.age);
@@ -21,16 +22,23 @@ int main(int argc, char const *argv[]) {
 
   ofstream out(nameFile, ios::app);
   if (!out.is_open()) cout << "Error: bad output\n";
+  cout << '\n' << out.tellp() << '\n';
   out.write((char *) &temp, sizeof temp);
+  cout << '\n' << out.tellp() << '\n';
   out.close();
 
-  ifstream in (nameFile);
+  cout << "\nCheck\n\n";
+
+  ifstream in ;
+  in.open (nameFile);
+  cout << '\n' << in.tellg() << '\n';
+  //in.seekg(0, ios::beg);
   if (!in.is_open()) cout << "Error: bad input file\n";
   TestData inputTemp;
-  in.seekg(0, ios::beg);
-  while (!in.eof()){
+  getline (in, inputTemp.name);
+  /*while (!in.eof()){
       in.read((char *) &inputTemp, sizeof inputTemp);
-  }
+  }*/
   in.close();
 
   cout << inputTemp.name << '\n';
