@@ -6,44 +6,46 @@ using namespace std;
 
 struct TestData{
   string name;
-  string age;
-  string phoneNumber;
+  int age;
+  int phoneNumber;
 };
 
 int main(int argc, char const *argv[]) {
   string nameFile = "data.txt";
-
   TestData temp;
+  cout << "Enter name: "; getline(cin, temp.name);
+  cout << "Enter age: "; cin >> temp.age;
+  cout << "Enter phone number: "; cin >> temp.phoneNumber;
 
-  cout << "Enter info: ";
-  getline(cin, temp.name);
-  getline(cin, temp.age);
-  getline(cin, temp.phoneNumber);
+  ofstream TOFILE(nameFile);
+  if (!TOFILE.is_open()) cout << "Error!\n ";
 
-  ofstream out(nameFile, ios::app);
-  if (!out.is_open()) cout << "Error: bad output\n";
-  cout << '\n' << out.tellp() << '\n';
-  out.write((char *) &temp, sizeof temp);
-  cout << '\n' << out.tellp() << '\n';
-  out.close();
+  TOFILE << temp.name << "###" << temp.age << "###" << temp.phoneNumber;
+  TOFILE.close();
 
-  cout << "\nCheck\n\n";
+  cout << "Writing to file succeses.\n";
 
-  ifstream in ;
-  in.open (nameFile);
-  cout << '\n' << in.tellg() << '\n';
-  //in.seekg(0, ios::beg);
-  if (!in.is_open()) cout << "Error: bad input file\n";
-  TestData inputTemp;
-  getline (in, inputTemp.name);
-  /*while (!in.eof()){
-      in.read((char *) &inputTemp, sizeof inputTemp);
-  }*/
-  in.close();
+  ifstream FROMFILE(nameFile);
+  if (!FROMFILE.is_open()) cout << "Error!\n ";
+  char ch;
+  while (FROMFILE.get(ch) && ch != '#')
+  {
+      FROMFILE >> temp.name;
+      break;
+  }
+  while (FROMFILE.get(ch) && ch != '#')
+  {
+      FROMFILE >> temp.age;
+      break;
+  }
+  while (FROMFILE.get(ch) && ch != '#')
+  {
+      FROMFILE >> temp.phoneNumber;
+      break;
+  }
 
-  cout << inputTemp.name << '\n';
-  cout << inputTemp.age << '\n';
-  cout << inputTemp.phoneNumber << '\n';
+  //FROMFILE >> temp.name >> temp.age >> temp.phoneNumber;
+  cout << temp.name << '\n' << temp.age << '\n' << temp.phoneNumber;
 
   return 0;
 }
